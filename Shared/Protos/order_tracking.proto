@@ -1,0 +1,30 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Shared.Protos";
+package ordertracking;
+
+// Request to create or track an order
+message OrderRequest {
+  string order_id = 1;
+  string customer_name = 2;
+  string address = 3;
+}
+
+// Single order status update
+message OrderStatus {
+  string order_id = 1;
+  string status = 2;
+  string timestamp = 3;
+}
+
+// Tracking service - server-side streaming of OrderStatus
+service Tracking {
+  // Client sends a single OrderRequest, server streams OrderStatus updates.
+  rpc TrackOrder(OrderRequest) returns (stream OrderStatus);
+}
+
+// Order service - simple unary create order
+service Order {
+  rpc CreateOrder(OrderRequest) returns (OrderStatus);
+}
+// tarikul
